@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+<p>
+   <a href="/">Home</a> &gt; Table of Contents 
+</p>
+<h1>Table of Contents</h1>
+{% for subject in object_list %}
+<div class="float-right">
+    <h5>
+        {% for group in subject.groups.all %}
+        <a href="/group/{{ group.slug }}/">{{ group }}</a>
+        {% endfor %}
+    </h5>
+</div>
+<h3><a href="/subject/{{ subject.slug }}/">{{ subject.name }}</a></h3>
+<div>
+    {{ subject.body|safe|truncatewords_html:"25"|striptags }}
+</div>
+<hr/>
+{% endfor %}
+{% endblock content %}

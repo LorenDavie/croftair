@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block content %}
+<p class="float-right">
+    <a href="/toc/">Table of Contents</a>  
+</p>
+<p>
+   <a href="/">Home</a> &gt; Group &gt; {{ group }} 
+</p>
+<h1>{{ group }}</h1>
+<ul>
+    {% for member in group.members.all %}
+    <li><a href="/subject/{{ member.slug }}/">{{ member }}</a></li>
+    {% endfor %}
+</ul>
+{% endblock content %}

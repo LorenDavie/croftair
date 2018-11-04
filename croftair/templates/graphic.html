@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}
+Croftair | {{ object.name }}
+{% endblock title %}
+
+{% block container_spec %}container-fluid{% endblock container_spec %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <p class="float-right">
+                <a href="/toc/">Table of Contents</a>  
+            </p>
+            <p>
+               <a href="/">Home</a> &gt; Subject &gt; {{ object.name }} 
+            </p>
+        </div>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col">
+            {{ object.render|safe }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            {% if object.aliases.exists %}
+            <h5>Also Known As</h5>
+            <ul>
+               {% for alias in object.aliases.all %}
+               <li><em>{{ alias }}</em><br/></li>
+               {% endfor %}
+            </ul>
+            {% endif %}
+            {% if object.groups.exists %}
+            <h5>Groups</h5>
+            <ul>
+                {% for group in object.groups.all %}
+                <li><a href="/group/{{ group.slug }}/">{{ group }}</a></li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            {% if object.related_group %}
+            <h5>Related</h5>
+            <ul>
+                {% for related_subject in object.related_group.members.all %}
+                <li><a href="/subject/{{ related_subject.slug }}/">{{ related_subject }}</a></li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock content %}
