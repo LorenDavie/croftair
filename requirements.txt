@@ -1,4 +1,8 @@
+boto==2.49.0
+dj-database-url==0.5.0
 Django==2.1.3
+django-storages==1.7.1
+gunicorn==19.9.0
 Markdown==3.0.1
 markdown-djangostaticimage==0.1
 pytz==2018.7

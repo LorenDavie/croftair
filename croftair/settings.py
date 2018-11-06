@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
+import dj_database_url
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -23,9 +24,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '39tbmkycy%dx)&^sv*v949o*ga0p3eq^-^w#sfv#y^)ur1iei%'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = True if os.environ.get('C_DEBUG',None) else False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['.croftair.com', 'localhost', 'croftair.herokuapp.com']
+
+local_static = True if os.environ.get('C_RUNLOCAL', None) else False
 
 
 # Application definition
@@ -37,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'storages',
     'croftair',
 ]
 
@@ -74,12 +78,17 @@ WSGI_APPLICATION = 'wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+DATABASES = {}
+
+if os.environ.get('C_RUNLOCAL', None):
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
     }
-}
+else:
+    DATABASES['default'] = dj_database_url.config()
 
 
 # Password validation
@@ -121,3 +130,13 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 CONTENT_DIR = os.path.join(BASE_DIR, 'content')
+
+# Storage
+if not local_static:
+    DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+    AWS_STORAGE_BUCKET_NAME = os.environ.get("C_AWS_STORAGE_BUCKET", "croftair")
+    AWS_AUTO_CREATE_BUCKET = True
+    STATIC_ROOT = "static"
+    STATICFILES_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+else:
+    STATICFILES_DIRS = [BASE_DIR]
