@@ -10,6 +10,7 @@ gunicorn==19.9.0
 jmespath==0.9.3
 Markdown==3.0.1
 markdown-djangostaticimage==0.1
+psycopg2==2.7.5
 python-dateutil==2.7.5
 pytz==2018.7
 s3transfer==0.1.13
